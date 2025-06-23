@@ -28,12 +28,4 @@ class DiagnosticTestService {
             return HardwareTestManager.shared.runFaceIDTest(testCase, completion: completion)
         }
     }
-    
-//    private func performGyroscopeCheck(_ testCase: TestCase) -> TestResult {
-//        return TestResult(result: true, testcase: testCase)
-//    }
-//    
-//    private func performAccelerometerCheck(_ testCase: TestCase) -> TestResult  {
-//        return TestResult(result: false, testcase: testCase)
-//    }
 }

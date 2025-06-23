@@ -19,7 +19,6 @@ final class NetworkClient: APIService {
         request.httpBody = try JSONEncoder().encode(data)
 
         let (responseData, response) = try await URLSession.shared.data(for: request)
-
         guard let httpResponse = response as? HTTPURLResponse,
               200..<300 ~= httpResponse.statusCode else {
             throw URLError(.badServerResponse)

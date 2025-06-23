@@ -18,6 +18,7 @@ struct HomeView: View {
         NavigationView {
                 VStack {
                     if isGridView {
+                        // Grid View
                         ScrollView {
                             LazyVGrid(columns:columns, spacing: 16) {
                                 ForEach(homeViewModel.filteredTestCases) { testcase in
@@ -46,8 +47,8 @@ struct HomeView: View {
                             }
                             .padding(.horizontal, 12)
                         }
-//                        .searchable(text: $homeViewModel.searchText, prompt: "Search Test Cases")
                     } else {
+                        // List View
                         List(homeViewModel.filteredTestCases){ testcase in
 //                            NavigationLink(destination: getTestCaseView(for: testcase)){
                             let isSelected = homeViewModel.selectedTestIDs.contains(testcase.id)

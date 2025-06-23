@@ -27,7 +27,6 @@ enum APIEndpoint {
     var headers: [String: String] {
         return [
             "Content-Type": "application/json"
-            // Add auth if needed
         ]
     }
 }

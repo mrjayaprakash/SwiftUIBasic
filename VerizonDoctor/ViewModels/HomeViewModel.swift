@@ -53,14 +53,6 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-//    func runSelectedTests() {
-//        testResults = selectedTests.map {
-//            DiagnosticTestService.shared.executeTest($0){ restult in
-//                
-//            }
-//        }
-//    }
-    
     func runSelectedTests(completion: @escaping () -> Void) {
         testResults.removeAll()
         let group = DispatchGroup()

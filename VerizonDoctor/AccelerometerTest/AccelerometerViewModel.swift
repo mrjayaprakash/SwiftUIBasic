@@ -14,7 +14,6 @@ class AccelerometerViewModel: ObservableObject {
         self.testCase = testCase
     }
     func runAccelerometerTest() {
-        //testResult = DiagnosticTestService.shared.executeTest(testCase)
         DiagnosticTestService.shared.executeTest(testCase) { restult in
             self.testResult = restult
             

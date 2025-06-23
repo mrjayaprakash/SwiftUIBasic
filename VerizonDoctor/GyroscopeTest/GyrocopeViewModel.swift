@@ -19,7 +19,6 @@ class GyrocopeViewModel: ObservableObject {
         //testResult = DiagnosticTestService.shared.executeTest(testCase)
         DiagnosticTestService.shared.executeTest(testCase) { restult in
             self.testResult = restult
-            
         }
     }
     
