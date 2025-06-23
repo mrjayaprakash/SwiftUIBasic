@@ -6,6 +6,16 @@
 //
 
 import Foundation
+
+enum ResultSubmissionState : Equatable {
+    case idle
+    case inProgress
+    case retrying(attempt: Int)
+    case cancelled
+    case success(message: String)
+    case failure(message: String)
+}
+
 class HomeViewModel: ObservableObject {
     @Published var testCases: [TestCase] = [
         TestCase(name: "Gyroscope", description: "Checks gyroscopep functionality", icon: "33", type: .gyroscope),
@@ -18,6 +28,9 @@ class HomeViewModel: ObservableObject {
     ]
     
     @Published var searchText: String = ""
+    @Published var selectedTestIDs: Set<UUID> = []
+    @Published var testResults: [TestResult] = []
+    
     var filteredTestCases: [TestCase] {
         if searchText.isEmpty {
             return testCases
@@ -27,4 +40,45 @@ class HomeViewModel: ObservableObject {
             }
         }
     }
+    
+    var selectedTests: [TestCase] {
+        filteredTestCases.filter { selectedTestIDs.contains($0.id) }
+    }
+    
+    func toggleSelection(for testCase: TestCase) {
+        if selectedTestIDs.contains(testCase.id) {
+            selectedTestIDs.remove(testCase.id)
+        } else {
+            selectedTestIDs.insert(testCase.id)
+        }
+    }
+    
+//    func runSelectedTests() {
+//        testResults = selectedTests.map {
+//            DiagnosticTestService.shared.executeTest($0){ restult in
+//                
+//            }
+//        }
+//    }
+    
+    func runSelectedTests(completion: @escaping () -> Void) {
+        testResults.removeAll()
+        let group = DispatchGroup()
+        var results: [TestResult] = []
+
+        for test in selectedTests {
+            group.enter()
+            DiagnosticTestService.shared.executeTest(test) { result in
+                DispatchQueue.main.async {
+                    results.append(result)
+                    group.leave()
+                }
+            }
+        }
+        group.notify(queue: .main) {
+            self.testResults = results
+            completion()
+        }
+    }
+
 }

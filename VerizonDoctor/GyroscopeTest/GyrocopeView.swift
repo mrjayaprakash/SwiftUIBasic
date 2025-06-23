@@ -29,6 +29,20 @@ struct GyrocopeView: View {
                     .font(.headline)
                     .padding()
             }
+            switch viewModel.submissionState {
+            case .idle, .cancelled, .retrying:
+                EmptyView()
+            case .inProgress:
+                ProgressView("Uploading...")
+            case .success(let message):
+                Text("✅ \(message)")
+                    .foregroundColor(.green)
+                    .font(.subheadline)
+            case .failure(let message):
+                Text("❌ \(message)")
+                    .foregroundColor(.red)
+                    .font(.subheadline)
+            }
         }
         .navigationTitle(viewModel.testCase.name)
         .navigationBarTitleDisplayMode(.inline)
