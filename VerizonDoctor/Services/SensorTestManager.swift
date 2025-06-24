@@ -14,7 +14,11 @@ class SensorTestManager {
     func runGyroScopeTest(_ testCase: TestCase, completion: @escaping (TestResult) -> Void) {
         guard motionMangaer.isGyroAvailable else {
             
-            completion(TestResult(result: false, testCase: testCase))
+            completion(TestResult(result: false,
+                                  testCase: testCase,
+                                  summary: DiagnosticStrings.gyroFailSummary,
+                                  details: DiagnosticStrings.gyroFailureDetails
+              ))
             return
         }
         motionMangaer.gyroUpdateInterval = 0.1
@@ -45,9 +49,12 @@ class SensorTestManager {
                             DiagnosticStrings.updateIntervalKey: "\(self.motionMangaer.gyroUpdateInterval)",
                            ])
 
-//                result = TestResult(result: true, testcase: testCase)
             } else {
-                result = TestResult(result: false, testCase: testCase)
+                result = TestResult(result: false,
+                                    testCase: testCase,
+                                    summary: DiagnosticStrings.gyroFailSummary,
+                                    details: DiagnosticStrings.gyroFailureDetails
+                )
             }
             self.motionMangaer.stopGyroUpdates()
             completion(result)

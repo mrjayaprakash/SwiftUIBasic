@@ -10,7 +10,7 @@ import Foundation
 struct TestResultRequest: Encodable {
     let testName: String
     let result: Bool
-    let summary: String
+    let summary: String?
     let details: String?
     let output: [String: String]?
     let timestamp: String

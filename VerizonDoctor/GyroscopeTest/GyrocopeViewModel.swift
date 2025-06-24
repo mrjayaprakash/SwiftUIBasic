@@ -15,23 +15,6 @@ class GyrocopeViewModel: ObservableObject {
     init(testCase: TestCase) {
         self.testCase = testCase
     }
-    func runGyroscopeTest1() {
-        //testResult = DiagnosticTestService.shared.executeTest(testCase)
-        DiagnosticTestService.shared.executeTest(testCase) { restult in
-            self.testResult = restult
-        }
-    }
-    
-    func runGyroscopeTest2() {
-        DiagnosticTestService.shared.executeTest(testCase) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.testResult = result
-            }
-            Task {
-                await self?.submitResultToServer()
-            }
-        }
-    }
     
     func runGyroscopeTest() {
         DiagnosticTestService.shared.executeTest(testCase) { [weak self] result in
@@ -42,7 +25,6 @@ class GyrocopeViewModel: ObservableObject {
          }
      }
     
-    //@MainActor
     private func submitResultToServer () async {
         guard let result = testResult else {
             submissionState = .failure(message: "No test result available to submit.")

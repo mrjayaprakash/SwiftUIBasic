@@ -11,12 +11,12 @@ struct TestResult: Identifiable {
     let id: UUID
     let result: Bool
     let testCase: TestCase
-    let summary: String
-    let details: String?
-    let output: [String: String]?
-    let timestamp: Date
-    let duration: TimeInterval?
-    let metadata: [String: Any]?
+    var summary: String?
+    var details: String?
+    var output: [String: String]?
+    var timestamp: Date
+    var duration: TimeInterval?
+    var metadata: [String: Any]?
 
     init(
         result: Bool,
