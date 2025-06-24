@@ -15,3 +15,20 @@ enum TestType: String, CaseIterable {
     case flashlight = "FlashLight"
     case faceID = "FaceID"
 }
+
+enum TestCategory {
+    case sensor
+    case hardware
+}
+
+extension TestType {
+    var category: TestCategory {
+        switch self {
+        case .gyroscope, .accelerometer, .magnetoMeter:
+            return .sensor
+        case .speaker, .camera, .flashlight, .faceID:
+            return .hardware
+        }
+    }
+}
+

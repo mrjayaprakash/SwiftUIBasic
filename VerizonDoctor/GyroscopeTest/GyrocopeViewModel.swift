@@ -11,13 +11,15 @@ class GyrocopeViewModel: ObservableObject {
     @Published var testResult: TestResult?
     @Published var submissionState: ResultSubmissionState = .idle
     let testCase: TestCase
+    private let testService: DiagnosticTestService
     
-    init(testCase: TestCase) {
+    init(testCase: TestCase, testService: DiagnosticTestService = DiagnosticTestService()) {
         self.testCase = testCase
+        self.testService = testService
     }
     
     func runGyroscopeTest() {
-        DiagnosticTestService.shared.executeTest(testCase) { [weak self] result in
+       testService.executeTest(testCase) { [weak self] result in
              Task { @MainActor in
                  self?.testResult = result
                  await self?.submitResultToServer()

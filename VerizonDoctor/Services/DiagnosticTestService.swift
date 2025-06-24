@@ -6,26 +6,23 @@
 //
 
 import Foundation
-class DiagnosticTestService {
-    static let shared = DiagnosticTestService()
+final class DiagnosticTestService {
+//    static let shared = DiagnosticTestService()
+    private let sensorTester: SensorTesting
+    private let hardwareTester: HardwareTesting
+
+      init(sensorTester: SensorTesting = SensorTestManager(),
+           hardwareTester: HardwareTesting = HardwareTestManager()) {
+          self.sensorTester = sensorTester
+          self.hardwareTester = hardwareTester
+      }
     
-//    func executeTest(_ testCase: TestCase) -> TestResult {
-    func executeTest(_ testCase: TestCase, completion: @escaping(TestResult) -> Void) {
-        switch testCase.type {
-        case .gyroscope:
-            return SensorTestManager.shared.runGyroScopeTest(testCase, completion: completion)
-        case .accelerometer:
-            return SensorTestManager.shared.runAccelerometerTest(testCase, completion: completion)
-        case .magnetoMeter:
-            return SensorTestManager.shared.runMagnetoMeterTest(testCase, completion: completion)
-        case .speaker:
-            return SensorTestManager.shared.runGyroScopeTest(testCase, completion: completion)
-        case .camera:
-            return SensorTestManager.shared.runGyroScopeTest(testCase, completion: completion)
-        case .flashlight:
-            return HardwareTestManager.shared.runFlashlightTest(testCase, completion: completion)
-        case .faceID:
-            return HardwareTestManager.shared.runFaceIDTest(testCase, completion: completion)
+    func executeTest(_ testCase: TestCase, completion: @escaping (TestResult) -> Void) {
+        switch testCase.category {
+        case .sensor:
+            sensorTester.runTest(for: testCase, completion: completion)
+        case .hardware:
+            hardwareTester.runTest(for: testCase, completion: completion)
         }
     }
 }

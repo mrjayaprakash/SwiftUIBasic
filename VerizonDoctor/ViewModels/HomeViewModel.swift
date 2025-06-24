@@ -30,7 +30,8 @@ class HomeViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var selectedTestIDs: Set<UUID> = []
     @Published var testResults: [TestResult] = []
-    
+    private let testService: DiagnosticTestService
+
     var filteredTestCases: [TestCase] {
         if searchText.isEmpty {
             return testCases
@@ -43,6 +44,10 @@ class HomeViewModel: ObservableObject {
     
     var selectedTests: [TestCase] {
         filteredTestCases.filter { selectedTestIDs.contains($0.id) }
+    }
+    
+    init(testService: DiagnosticTestService = DiagnosticTestService()) {
+        self.testService = testService
     }
     
     func toggleSelection(for testCase: TestCase) {
@@ -60,7 +65,7 @@ class HomeViewModel: ObservableObject {
 
         for test in selectedTests {
             group.enter()
-            DiagnosticTestService.shared.executeTest(test) { result in
+            testService.executeTest(test) { result in
                 DispatchQueue.main.async {
                     results.append(result)
                     group.leave()
@@ -72,5 +77,4 @@ class HomeViewModel: ObservableObject {
             completion()
         }
     }
-
 }

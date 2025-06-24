@@ -9,14 +9,18 @@ import Foundation
 class AccelerometerViewModel: ObservableObject {
     @Published var testResult: TestResult?
     let testCase: TestCase
+    private let testService: DiagnosticTestService
     
-    init(testCase: TestCase) {
+    init(testCase: TestCase, testService: DiagnosticTestService = DiagnosticTestService()) {
         self.testCase = testCase
+        self.testService = testService
     }
+    
     func runAccelerometerTest() {
-        DiagnosticTestService.shared.executeTest(testCase) { restult in
-            self.testResult = restult
-            
-        }
-    }
+       testService.executeTest(testCase) { [weak self] result in
+             Task { @MainActor in
+                 self?.testResult = result
+             }
+         }
+     }
 }

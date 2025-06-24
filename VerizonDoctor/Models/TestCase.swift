@@ -13,4 +13,7 @@ struct TestCase: Identifiable {
     let description: String
     let icon: String
     let type: TestType
+    var category: TestCategory {
+        return type.category
+    }
 }

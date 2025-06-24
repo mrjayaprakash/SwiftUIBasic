@@ -14,14 +14,17 @@ class TestResultSummaryViewModel: ObservableObject {
     @Published var testResults: [TestResult] = []
     @Published var submissionState: ResultSubmissionState = .idle
 
-    init(results: [TestResult]) {
+    private let testService: DiagnosticTestService
+
+    init(results: [TestResult], testService: DiagnosticTestService = DiagnosticTestService()) {
         self.testResults = results
+        self.testService = testService
     }
     
     func runSelectedTests() {
         testResults.removeAll()
         for testCase in selectedTests {
-            DiagnosticTestService.shared.executeTest(testCase) { [weak self] result in
+            testService.executeTest(testCase) { [weak self] result in
                 Task { @MainActor in
                     self?.testResults.append(result)
                 }

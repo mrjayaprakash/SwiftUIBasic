@@ -8,8 +8,27 @@
 import AVFoundation
 import LocalAuthentication
 
-class HardwareTestManager {
+protocol HardwareTesting {
+    func runTest(for testCase: TestCase, completion: @escaping (TestResult) -> Void)
+}
+
+final class HardwareTestManager: HardwareTesting {
+    
     static let shared = HardwareTestManager()
+    
+    func runTest(for testCase: TestCase, completion: @escaping (TestResult) -> Void) {
+        switch testCase.type {
+        case .flashlight:
+            runFlashlightTest(testCase, completion: completion)
+        case .faceID:
+            runFaceIDTest(testCase, completion: completion)
+        default:
+            completion(TestResult(
+                    result: false,
+                    testCase: testCase
+                ))
+        }
+    }
     
     func runFlashlightTest(_ testCase: TestCase, completion: @escaping (TestResult) -> Void) {
         guard let device = AVCaptureDevice.default(for: .video),
