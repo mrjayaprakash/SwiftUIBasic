@@ -7,16 +7,18 @@
 
 import SwiftUI
 
-struct HomeView: View {
-    @StateObject private var homeViewModel = HomeViewModel()
+struct HomeView2: View {
+    @StateObject var homeViewModel = HomeViewModel()
     @State private var isGridView = false
     @State private var isNavigatingToSummary = false
+    @State private var selectedMode: TestMode = .system
     
     var columns: [GridItem] = [GridItem(.adaptive(minimum: 100), spacing: 16)]
     private let columnsCount = 3
     var body: some View {
         NavigationView {
-                VStack {
+            VStack(spacing: 0) {
+//                    HeaderView(selectedTestMode: $selectedMode)
                     if isGridView {
                         // Grid View
                         ScrollView {

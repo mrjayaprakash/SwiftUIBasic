@@ -13,7 +13,7 @@ struct VerizonDoctorApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            DiagnosticTabBarView()
         }
     }
 }
