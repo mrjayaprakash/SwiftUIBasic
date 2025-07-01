@@ -18,7 +18,7 @@ struct HomeGridView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 16) {
                 ForEach(testCases) { testcase in
-//                    NavigationLink(destination: getTestCaseView(testcase)) {
+                    NavigationLink(destination: getTestCaseView(testcase)) {
                         let isSelected = selectedIDs.contains(testcase.id)
                     VStack(alignment: .leading, spacing: 12) {
                         VStack(alignment: .leading, spacing: 4) {
@@ -42,9 +42,9 @@ struct HomeGridView: View {
                         }
                         
                     }
-                    .onTapGesture {
-                        toggleSelection(testcase)
-                    }
+//                    .onTapGesture {
+//                        toggleSelection(testcase)
+//                    }
                         .padding()
                         .frame(width: 110, height: 140)
                         .background(
@@ -52,7 +52,7 @@ struct HomeGridView: View {
                             .stroke(Color.gray, lineWidth: 2)
 //                                            .stroke(isSelected ? Color.blue : Color.gray, lineWidth: 2)
                         )
-//                    }
+                    }
                 }
             }
             .padding(.horizontal, 12)

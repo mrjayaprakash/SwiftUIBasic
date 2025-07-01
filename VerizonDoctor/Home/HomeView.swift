@@ -12,7 +12,7 @@ struct HomeView: View {
     @State private var isGridView = true
     @State private var isNavigatingToSummary = false
     @State private var selectedMode: TestMode = .system
-
+    @State private var isPresentingTouchTest = false
     private let columns: [GridItem] = [GridItem(.adaptive(minimum: 100), spacing: 10)]
 
     var body: some View {
@@ -46,7 +46,7 @@ struct HomeView: View {
                 }
 
                 // Run Button (visible only in list mode)
-                if !isGridView {
+//                if !isGridView {
                     Button("Run Selected Tests") {
                         homeViewModel.runSelectedTests {
                             isNavigatingToSummary = true
@@ -79,7 +79,10 @@ struct HomeView: View {
             return AnyView(FlashlightView(testcase: testCase))
         case .faceID:
             return AnyView(FaceIDView(testcase: testCase))
+        case .touchScreen:
+            return AnyView(TouchScreenView(testcase: testCase))
+        case .badPixel:
+            return AnyView(BadPixelTestView(testcase: testCase))
         }
     }
-}
 

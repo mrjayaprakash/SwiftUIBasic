@@ -24,7 +24,14 @@ class HomeViewModel: ObservableObject {
         TestCase(name: "Speaker", description: "Checks speaker sound output", icon: "27", type: .speaker),
         TestCase(name: "Camera", description: "Ensure camera operates correctly", icon: "19", type: .camera),
         TestCase(name: "FlashLight", description: "Verifiyes flash light  functionality", icon: "16", type: .flashlight),
-        TestCase(name: "Face ID Test", description: "Authenticates using Face ID", icon: "55", type: .faceID)
+        TestCase(name: "Face ID Test", description: "Authenticates using Face ID", icon: "55", type: .faceID),
+        TestCase(name: "Touch Screen Test",description: "Checks screen responsiveness by requiring the user to tap or swipe across grid cells", icon: "18", type: .touchScreen),
+        TestCase(
+            name: "Bad Pixel Test",
+            description: "Cycles through solid colors to help visually detect dead or stuck pixels on the screen",
+            icon: "55",
+            type: .badPixel
+        )
     ]
     
     @Published var searchText: String = ""

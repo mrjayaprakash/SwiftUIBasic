@@ -24,11 +24,6 @@ struct GyrocopeView: View {
             }
             .buttonStyle(.borderedProminent)
             .padding()
-//            if let result = viewModel.testResult {
-//                Text("Result: \(result.result ? "Pass" : "Fail")")
-//                    .font(.headline)
-//                    .padding()
-//            }
             if let testResult = viewModel.testResult {
                            VStack(alignment: .leading, spacing: 12) {
                                Text("Result: \(testResult.result ? "✅ Pass" : "❌ Fail")")

@@ -19,8 +19,6 @@ enum DiagnosticStrings {
 
     static let gyroFailureDetails = "No rotation rate data received from motion manager."
 
-   
-
     static let gyroOutputX = "rotationRateX"
 
     static let gyroOutputY = "rotationRateY"
@@ -38,8 +36,6 @@ enum DiagnosticStrings {
     static let accelSuccessDetails = "Acceleration data captured successfully."
 
     static let accelFailureDetails = "Accelerometer unavailable or returned no data."
-
-   
 
     static let accelOutputX = "accelX"
 
@@ -59,8 +55,6 @@ enum DiagnosticStrings {
 
     static let magnetFailureDetails = "No magnetic field data received or sensor unavailable."
 
-   
-
     static let magnetOutputX = "fieldX"
 
     static let magnetOutputY = "fieldY"
@@ -79,8 +73,6 @@ enum DiagnosticStrings {
 
     static let flashlightFailureDetails = "Error encountered while enabling torch."
 
-   
-
     static let torchOutputLevel = "torchLevel"
 
    
@@ -95,11 +87,33 @@ enum DiagnosticStrings {
 
     static let faceIDFailureDetails = "Biometric authentication unavailable or canceled."
 
-   
-
     static let faceIDOutputType = "biometryType"
+  
+    // MARK: - Bad Pixel
+    
+    
+    static let badPixelPassSummary = "Screen appears free of pixel defects."
 
-   
+    static let badPixelFailSummary = "Bad or stuck pixels were detected."
+
+    static let badPixelSuccessDetails = "User confirmed the screen displayed all test colors without anomalies."
+
+    static let badPixelFailureDetails = "User reported dead or stuck pixels during the color sweep."
+    static let badPixelConfirmPrompt = "Did you notice any dead or stuck pixels?"
+    static let badPixelNoIssues = "No Issues"
+    static let badPixelIssueFound = "Yes, Issue Found"
+
+
+    // MARK: - Touch
+    
+    static let touchPassSummary = "Touch screen is fully responsive."
+
+    static let touchFailSummary = "Touch responsiveness test failed."
+
+    static let touchSuccessDetails = "User successfully interacted with all grid regions."
+
+    static let touchFailureDetails = "Some areas of the screen did not register user input."
+
 
     // MARK: - Metadata Keys
 
@@ -116,5 +130,20 @@ enum DiagnosticStrings {
     static let torchAvailableKey = "torchAvailable"
 
     static let testModeKey = "testExecutionMode"
+    
+    // MARK: - Actions
+
+    static let runTest = "Run Test"
+    static let restart = "Restart"
+    static let next = "Next"
+    static let uploadResults = "Upload to Server"
+    static let done = "Done"
+    
+    // MARK: - Result Labels
+
+    static let testPassed = "Test Passed"
+    static let testFailed = "Test Failed"
+    static let resultPassSymbol = "✅"
+    static let resultFailSymbol = "❌"
 
 }
