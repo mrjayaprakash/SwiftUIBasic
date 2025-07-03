@@ -8,7 +8,9 @@
 enum DiagnosticStrings {
 
    
-
+    static let hardwareTestTitle = "Hardware Test"
+    static let categoriesText = "Categories"
+    static let runSelectedTest = "Run Selected Tests"
     // MARK: - Gyroscope
 
     static let gyroPassSummary = "Gyroscope is active."
@@ -145,5 +147,8 @@ enum DiagnosticStrings {
     static let testFailed = "Test Failed"
     static let resultPassSymbol = "✅"
     static let resultFailSymbol = "❌"
-
+    
+    static let testCompletionPromptTitle = "Are you done with the test?"
+    static let testCompletionPromptConfirm = "Yes"
+    static let testCompletionPromptCancel = "No"
 }

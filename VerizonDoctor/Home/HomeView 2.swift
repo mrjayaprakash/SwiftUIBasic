@@ -137,6 +137,8 @@ struct HomeView2: View {
             return AnyView(FaceIDView(testcase: testCase))
         case .badPixel:
             return AnyView(FaceIDView(testcase: testCase))
+        case .multiTouch:
+            return AnyView(TouchScreenView(testcase: testCase))
         }
     }
     }
@@ -363,3 +365,138 @@ import SwiftUI
         }
     }
 }*/
+struct TouchTestView1: View {
+    @ObservedObject var viewModel: TouchTestViewModel
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        GeometryReader { geometry in
+            let cellSize: CGFloat = 50
+            let spacing: CGFloat = 6
+            let columnsCount = Int((geometry.size.width + spacing) / (cellSize + spacing))
+            let rowsCount = Int((geometry.size.height + spacing) / (cellSize + spacing))
+            let totalCells = rowsCount * columnsCount
+            let columns = Array(repeating: GridItem(.fixed(cellSize), spacing: spacing), count: columnsCount)
+
+            ZStack {
+                LazyVGrid(columns: columns, spacing: spacing) {
+                    ForEach(0..<totalCells, id: \.self) { index in
+                        Rectangle()
+                            .fill(viewModel.clearedCells.contains(index) ? .green : .blue)
+                            .frame(width: cellSize, height: cellSize)
+                            .gesture(
+                                DragGesture(minimumDistance: 0)
+                                    .onChanged { _ in viewModel.clearCell(index) }
+                            )
+                    }
+                }
+                .padding(spacing)
+
+                // ✅ Test result overlay
+                if viewModel.showResultOverlay {
+                    TestResultOverlay(
+                        passed: viewModel.testPassed,
+                        title: viewModel.testPassed ? DiagnosticStrings.testPassed : DiagnosticStrings.testFailed,
+                        onRestart: {
+                            viewModel.startTest()
+                        },
+                        onDone: {
+                            dismiss()
+                        }
+                    )
+                }
+            }
+            .onAppear {
+                viewModel.gridSize = totalCells
+                viewModel.startTest()
+            }
+            // ✅ "Are you done?" alert after 20 seconds
+            .alert("Are you done with the test?", isPresented: $viewModel.showCompletionPrompt) {
+                Button("Yes") {
+                    viewModel.finishTest(manualChoice: nil)
+                }
+                Button("No", role: .cancel) {
+                    viewModel.showCompletionPrompt = false
+                }
+            }
+        }
+    }
+}
+
+/*struct TouchScreenView: View {
+    @State private var isPresentingTouchTest = false
+    @StateObject private var viewModel: TouchTestViewModel
+    
+    init(testcase: TestCase){
+        _viewModel = StateObject(wrappedValue: TouchTestViewModel(testCase: testcase))
+    }
+    
+    var body: some View {
+        VStack {
+            Text(viewModel.testCase.name)
+                .font(.title2)
+
+            Spacer()
+
+            Button("Run Touch Test") {
+                isPresentingTouchTest = true
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
+        .sheet(isPresented: $isPresentingTouchTest) {
+            TouchTestView(viewModel: viewModel, onClose: {
+                isPresentingTouchTest = false
+            })
+        }
+    }
+}*/
+//enum TestMode: String, CaseIterable, Identifiable {
+//    case system = "System"
+//    case hardwar = "Hardware"
+//    var id: String { rawValue }
+//}
+//
+//struct HeaderView: View {
+//    @Binding var selectedTestMode: TestMode
+//
+//    var body: some View {
+//        let customRed: Color = Color(hex: 0xDB2F2D)
+//        VStack(spacing: 16) {
+//            HStack {
+//                Text ("MVD Active Tests")
+//                    .font(.title.bold())
+//                    .foregroundColor(.yellow)
+//                Spacer()
+//
+//                HStack(spacing: 16) {
+//
+//                    Button(action: {
+//                    }) {
+//                        Image(systemName: "magnifyingglass")
+//                            .foregroundColor(.white)
+//                            .imageScale(.large)
+//                    }
+//                    Button(action: {
+//                    }) {
+//                        Image(systemName: "bubble.left")
+//                            .foregroundColor(.white)
+//                            .imageScale(.large)
+//                    }
+//                }
+//
+//            }
+//            .background(customRed)
+//            Picker("Test Mode", selection: $selectedTestMode) {
+//                ForEach(TestMode.allCases) { mode in
+//                    Text(mode.rawValue).tag(mode)
+//                }
+//            }
+//            .pickerStyle(.segmented)
+//            .padding(.horizontal)
+//
+//        }
+//        .padding()
+//        .background(customRed)
+//    }
+//}

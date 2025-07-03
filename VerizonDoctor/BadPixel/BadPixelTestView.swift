@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
-    
+
 struct BadPixelTestView: View {
     let testCase: TestCase
-
+    
     @StateObject private var viewModel: BadPixelTestViewModel
+    @State private var isPresentingColorTest = false
     
     init(testcase: TestCase) {
         self.testCase = testcase
@@ -18,65 +19,31 @@ struct BadPixelTestView: View {
     }
     
     var body: some View {
-        ZStack {
-            VStack {
-                if let testResult = viewModel.testResult {
-                    TestResultView(result: testResult)
-                        .transition(.opacity)
-                }
-                if !viewModel.isTesting {
-                    Text(viewModel.testCase.name)
-                    
-                        .font(.title2)
-                        .padding(.top)
-
-                    Button(DiagnosticStrings.runTest) {
-                        viewModel.startTest()
-                    }
-                    .buttonStyle(.borderedProminent)
-                }
+        VStack {
+            Text(testCase.name)
+                .font(.title2)
+            
+            if let result = viewModel.testResult {
+                TestResultView(result: result)
             }
-            .padding()
-
-            if viewModel.isTesting {
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button(DiagnosticStrings.next) {
-                            viewModel.nextColor()
-                        }
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 10)
-                        .background(Color.white.opacity(0.5))
-                        .foregroundColor(.black)
-                        .clipShape(Capsule())
-                        .zIndex(1)
-                    }
-                    Spacer()
-                }
+            
+            Spacer()
+            
+            Button(DiagnosticStrings.runTest) {
+                isPresentingColorTest = true
             }
-            if viewModel.testCompleted && viewModel.passed == nil {
-                ConfirmationDialog(
-                    prompt: DiagnosticStrings.badPixelConfirmPrompt,
-                    positiveActionLabel: DiagnosticStrings.badPixelNoIssues,
-                    negativeActionLabel: DiagnosticStrings.badPixelIssueFound,
-                    onConfirm: { passed in
-                        viewModel.markResult(passed: passed)
-                    }
-                )
-                .padding()
+            .buttonStyle(.borderedProminent)
+        }
+        .padding()
+        .fullScreenCover(isPresented: $isPresentingColorTest) {
+            BadPixelColorTestView(colors: viewModel.colors) { passed in
+                viewModel.markResult(passed: passed)
+                isPresentingColorTest = false
             }
         }
-        .background(backgroundColor.ignoresSafeArea())
-        .navigationTitle(viewModel.testCase.name)
-        .navigationBarTitleDisplayMode(.inline)
     }
-
-
+    
     private var backgroundColor: Color {
         viewModel.isTesting || viewModel.testCompleted ? viewModel.currentColor : Color(.systemBackground)
     }
 }
-
-
-

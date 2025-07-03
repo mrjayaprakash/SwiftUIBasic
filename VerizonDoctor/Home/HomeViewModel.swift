@@ -31,6 +31,13 @@ class HomeViewModel: ObservableObject {
             description: "Cycles through solid colors to help visually detect dead or stuck pixels on the screen",
             icon: "55",
             type: .badPixel
+        ),
+
+        TestCase(
+            name: "Multi-Touch Screen Test",
+            description: "Evaluates simultaneous touch recognition by prompting the user to interact with multiple grid cells using more than one finger.",
+            icon: "19",
+            type: .multiTouch
         )
     ]
     

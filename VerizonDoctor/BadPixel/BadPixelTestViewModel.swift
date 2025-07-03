@@ -21,7 +21,7 @@ class BadPixelTestViewModel: ObservableObject {
     }
     
     let colors: [Color] = [.red, .green, .blue, .black, .white]
-
+    
     var currentColor: Color {
         colors[currentIndex]
     }
@@ -34,7 +34,7 @@ class BadPixelTestViewModel: ObservableObject {
         testResult = nil
         startTime = Date()
     }
-
+    
     func nextColor() {
         if currentIndex < colors.count - 1 {
             currentIndex += 1
@@ -43,7 +43,7 @@ class BadPixelTestViewModel: ObservableObject {
             testCompleted = true
         }
     }
-
+    
     func markResult(passed: Bool) {
         self.passed = passed
         let duration = startTime.map { Date().timeIntervalSince($0) }

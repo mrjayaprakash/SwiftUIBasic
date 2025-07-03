@@ -12,18 +12,19 @@ struct HomeView: View {
     @State private var isGridView = true
     @State private var isNavigatingToSummary = false
     @State private var selectedMode: TestMode = .system
+    @State private var selectedCategory: String = "All test"
     @State private var isPresentingTouchTest = false
     private let columns: [GridItem] = [GridItem(.adaptive(minimum: 100), spacing: 10)]
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                HeaderView(selectedTestMode: $selectedMode)
+            VStack(spacing: 4) {
+                HeaderView(selectedTestMode: $selectedMode, selectedCategory: $selectedCategory)
                 
-                TextField("Search Test Cases", text: $homeViewModel.searchText)
-                    .textFieldStyle(.roundedBorder)
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
+//                TextField("Search Test Cases", text: $homeViewModel.searchText)
+//                    .textFieldStyle(.roundedBorder)
+//                    .padding(.horizontal)
+//                    .padding(.vertical, 8)
                 
                 // Display grid or list
                 Group {
@@ -47,7 +48,7 @@ struct HomeView: View {
 
                 // Run Button (visible only in list mode)
 //                if !isGridView {
-                    Button("Run Selected Tests") {
+                Button(DiagnosticStrings.runSelectedTest) {
                         homeViewModel.runSelectedTests {
                             isNavigatingToSummary = true
                         }
@@ -83,6 +84,8 @@ struct HomeView: View {
             return AnyView(TouchScreenView(testcase: testCase))
         case .badPixel:
             return AnyView(BadPixelTestView(testcase: testCase))
+        case .multiTouch:
+            return AnyView(MultiTouchScreenView(testcase: testCase))
         }
     }
 

@@ -20,33 +20,25 @@ struct HomeGridView: View {
                 ForEach(testCases) { testcase in
                     NavigationLink(destination: getTestCaseView(testcase)) {
                         let isSelected = selectedIDs.contains(testcase.id)
-                    VStack(alignment: .leading, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 4) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Image(testcase.icon)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+
+//                        VStack(alignment: .leading, spacing: 4) {
                             Text(testcase.name)
-                                .font(.headline)
-                            Text("subtitle")
-                                .font(.subheadline)
-                        }
-                        HStack {
-                            Image(testcase.icon)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 15, height: 15)
-                            
-                            Spacer()
-                            Image(systemName: isSelected ? "checkmark.square.fill" : "square")
-                            
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 15, height: 15)
-                        }
+                                .font(.system(size: 12))
+                                .foregroundColor(.black)
+                                .lineLimit(nil) // allows unlimited lines
+                                .fixedSize(horizontal: false, vertical: true)
                         
                     }
 //                    .onTapGesture {
 //                        toggleSelection(testcase)
 //                    }
                         .padding()
-                        .frame(width: 110, height: 140)
+                        .frame(width: 112, height: 95)
                         .background(
                             RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray, lineWidth: 2)
@@ -55,6 +47,8 @@ struct HomeGridView: View {
                     }
                 }
             }
+            .padding(.top, 8)
+            .padding(.bottom, 8)
             .padding(.horizontal, 12)
         }
     }

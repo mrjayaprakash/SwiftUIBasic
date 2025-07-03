@@ -16,6 +16,7 @@ enum TestType: String, CaseIterable {
     case faceID = "FaceID"
     case touchScreen = "TochScreen"
     case badPixel = "badPixel"
+    case multiTouch = "multiTouch"
 }
 
 enum TestCategory {
@@ -28,7 +29,7 @@ extension TestType {
         switch self {
         case .gyroscope, .accelerometer, .magnetoMeter:
             return .sensor
-        case .speaker, .camera, .flashlight, .touchScreen, .badPixel, .faceID:
+        case .speaker, .camera, .flashlight, .touchScreen, .multiTouch, .badPixel, .faceID:
             return .hardware
         }
     }

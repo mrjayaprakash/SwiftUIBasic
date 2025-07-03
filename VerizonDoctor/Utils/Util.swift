@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum DateFormatterUtil {
     static func formattedShortDateTime(from date: Date) -> String {
@@ -13,5 +14,14 @@ enum DateFormatterUtil {
         formatter.dateStyle = .short
         formatter.timeStyle = .medium
         return formatter.string(from: date)
+    }
+}
+
+extension Color {
+    init(hex: UInt, alpha: Double = 1.0) {
+        let red = Double((hex >> 16) & 0xff) / 255
+        let green = Double((hex >> 8) & 0xff) / 255
+        let blue = Double(hex & 0xff) / 255
+        self.init(.sRGB, red: red, green: green, blue: blue, opacity: alpha)
     }
 }
