@@ -116,7 +116,17 @@ enum DiagnosticStrings {
 
     static let touchFailureDetails = "Some areas of the screen did not register user input."
 
+    // MARK: - Multi Touch
+    
+    static let multiTouchPassSummary = "Multi-touch capability is working as expected."
 
+    static let multiTouchFailSummary = "Multi-touch responsiveness test failed."
+
+    static let multiTouchSuccessDetails = "User successfully tapped both test points simultaneously in each round within the required time."
+
+    static let multiTouchFailureDetails = "User did not complete the simultaneous tap gesture within the time limit, indicating potential multi-touch recognition issues."
+
+    
     // MARK: - Metadata Keys
 
     static let sensorTypeKey = "sensorType"

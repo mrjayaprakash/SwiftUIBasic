@@ -500,3 +500,219 @@ struct TouchTestView1: View {
 //        .background(customRed)
 //    }
 //}
+//
+//  MultiTouchSyncView.swift
+//  VerizonDoctor
+//
+//  Created by Manikaraj, Jayaprakash (Cognizant) on 04/07/25.
+//
+
+//import SwiftUI
+//
+//struct MultiTouchSyncView1: View {
+//    @StateObject private var viewModel: MultiTouchSyncViewModel
+//    var dismissAction: () -> Void
+//
+//    @State private var isActive: [Bool] = [false, false] // 💡 Visual feedback toggle per circle
+//
+//    init(testCase: TestCase, dismissAction: @escaping () -> Void) {
+//        _viewModel = StateObject(wrappedValue: MultiTouchSyncViewModel(testCase: testCase))
+//        self.dismissAction = dismissAction
+//    }
+//
+//    var body: some View {
+//        GeometryReader { geometry in
+//            ZStack {
+//                Color.white.ignoresSafeArea()
+//
+//                // 🎯 Target circles with color change and border glow
+////                ForEach(0..<2) { index in
+////                    Circle()
+////                        .fill(isActive[index] ? Color.green : Color.blue)
+////                        .frame(width: 80, height: 80)
+////                        .position(viewModel.targetPoints[index])
+////                        .animation(.easeInOut(duration: 0.2), value: isActive[index])
+////                        .overlay(
+////                            Circle()
+////                                .stroke(isActive[index] ? Color.white.opacity(0.8) : Color.clear, lineWidth: 3)
+////                        )
+////                }
+//                ForEach(0..<2) { index in
+//                    ZStack {
+//                        // Glowing ring
+//                        Circle()
+//                            .stroke(Color.green.opacity(isActive[index] ? 0.6 : 0), lineWidth: 12)
+//                            .frame(width: 100, height: 100)
+//                            .scaleEffect(isActive[index] ? 1.1 : 0.8)
+//                            .opacity(isActive[index] ? 1 : 0)
+//                            .animation(.easeOut(duration: 0.3), value: isActive[index])
+//
+//                        // Core circle
+//                        Circle()
+//                            .fill(isActive[index] ? Color.green : Color.blue)
+//                            .frame(width: 80, height: 80)
+//                            .overlay(
+//                                Circle()
+//                                    .stroke(isActive[index] ? Color.white.opacity(0.8) : Color.clear, lineWidth: 3)
+//                            )
+//                    }
+//                    .position(viewModel.targetPoints[index])
+//                }
+//
+//                // ✅ Result overlay after successful touch
+//                if viewModel.testCompleted, let result = viewModel.testResult {
+//                    VStack(spacing: 16) {
+//                        Spacer()
+//                        TestResultView(result: result)
+//                        Button("Done") {
+//                            dismissAction()
+//                        }
+//                        .buttonStyle(.borderedProminent)
+//                        .tint(.blue)
+//                        Spacer()
+//                    }
+//                    .padding()
+//                    .background(Color.black.opacity(0.6).ignoresSafeArea())
+//                }
+//            }
+//            .onAppear {
+//                viewModel.configurePoints(in: geometry.size)
+//                viewModel.startTest()
+//            }
+//            .overlay(
+//                MultiTouchSurfaceView { touches in
+//                    viewModel.evaluateTouches(touches)
+//
+//                    // ✅ Animate circles when touched
+//                    for (i, matched) in viewModel.isTouched.enumerated() {
+//                        if matched {
+//                            isActive[i] = true
+//                        }
+//                    }
+//
+//                    // Delay highlight reset only if test is not completed
+//                    if !viewModel.testCompleted {
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+//                            isActive = [false, false]
+//                        }
+//                    }
+//
+//                    // Console debug
+//                    print("Touches detected:", touches.map { "(\(Int($0.x)), \(Int($0.y)))" })
+//                }
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                .background(Color.clear)
+//                .allowsHitTesting(true)
+//                .ignoresSafeArea()
+//            )
+//        }
+//    }
+//}
+
+
+class MultiTouchSyncViewModel1: ObservableObject {
+    @Published var isTouched: [Bool] = [false, false]
+    @Published var targetPoints: [CGPoint] = [CGPoint.zero, CGPoint.zero]
+    @Published var testCompleted = false
+    @Published var testResult: TestResult? = nil
+
+    private let radius: CGFloat = 40
+    private let touchTolerance: CGFloat = 45
+    private var startTime: Date?
+    private let testCase: TestCase
+
+    init(testCase: TestCase) {
+        self.testCase = testCase
+    }
+
+    func configurePoints(in size: CGSize) {
+        let gap: CGFloat = 160
+        let centerY = size.height / 2
+        let centerX = size.width / 2
+
+        targetPoints[0] = CGPoint(x: centerX - gap / 2, y: centerY)
+        targetPoints[1] = CGPoint(x: centerX + gap / 2, y: centerY)
+    }
+
+    func startTest() {
+        testCompleted = false
+        isTouched = [false, false]
+        testResult = nil
+        startTime = Date()
+    }
+
+    func evaluateTouches(_ detectedPoints: [CGPoint]) {
+        guard !testCompleted else { return }
+
+        isTouched = [false, false]
+
+        for (i, target) in targetPoints.enumerated() {
+            for touch in detectedPoints {
+                if CGPoint.distance(from: target, to: touch) <= touchTolerance {
+                    isTouched[i] = true
+                    break
+                }
+            }
+        }
+
+        // ✅ Delay result overlay so animation can show
+        if isTouched.allSatisfy({ $0 }) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                self.testCompleted = true
+
+                let duration = self.startTime.map { Date().timeIntervalSince($0) }
+
+                self.testResult = TestResult(
+                    result: true,
+                    testCase: self.testCase,
+                    summary: DiagnosticStrings.multiTouchPassSummary,
+                    details: DiagnosticStrings.multiTouchSuccessDetails,
+                    timestamp: Date(),
+                    duration: duration
+                )
+            }
+        }
+    }
+}
+
+//struct MultiTouchView: View {
+//
+//    let testCase: TestCase
+//
+//    @StateObject private var viewModel: BadPixelTestViewModel
+//    @State private var isPresentingColorTest = false
+//
+//    init(testcase: TestCase) {
+//        self.testCase = testcase
+//        _viewModel = StateObject(wrappedValue: BadPixelTestViewModel(testCase: testcase))
+//    }
+//
+//    @State private var showTestView = false
+//
+//    var body: some View {
+//        VStack(spacing: 20) {
+//            Text("Multi-Touch Test")
+//                .font(.title2)
+//                .bold()
+//
+//            Text("Use two fingers to tap both red circles simultaneously. You’ll do this twice. Each round has a 10 second limit.")
+//                .multilineTextAlignment(.center)
+//                .padding()
+//
+//            Button("Run Test") {
+//                viewModel.startTest()
+//                showTestView = true
+//            }
+//            .buttonStyle(.borderedProminent)
+//        }
+//        .fullScreenCover(isPresented: $showTestView) {
+//            MultiTouchTestView(viewModel: viewModel) {
+//                showTestView = false
+//            }
+//        }
+//        .onChange(of: viewModel.result) { _ in
+//            // handle result here (pass/fail) when dismissed
+//        }
+//    }
+//}
+

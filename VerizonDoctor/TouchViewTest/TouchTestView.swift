@@ -5,65 +5,68 @@
 //  Created by Manikaraj, Jayaprakash (Cognizant) on 26/06/25.
 //
 
+
 import SwiftUI
 
 struct TouchTestView: View {
     @ObservedObject var viewModel: TouchTestViewModel
     @Environment(\.dismiss) private var dismiss
+
     private let cellSize: CGFloat = 60
     private let cellSpacing: CGFloat = 1
 
     var body: some View {
-        GeometryReader { geometry in
-            let columnsCount = Int((geometry.size.width + cellSpacing) / (cellSize + cellSpacing))
-            let rowsCount = Int((geometry.size.height + cellSpacing) / (cellSize + cellSpacing))
-            let totalCells = rowsCount * columnsCount
-            let columns = Array(repeating: GridItem(.fixed(cellSize), spacing: cellSpacing), count: columnsCount)
+        let screenSize = UIScreen.main.bounds
+        let columnsCount = Int(screenSize.width / (cellSize + cellSpacing))
+        let rowsCount = Int(screenSize.height / (cellSize + cellSpacing))
+        let totalCells = columnsCount * rowsCount
+        let columns = Array(repeating: GridItem(.fixed(cellSize), spacing: cellSpacing), count: columnsCount)
 
-            ZStack {
-                LazyVGrid(columns: columns, spacing: cellSpacing) {
-                    ForEach(0..<totalCells, id: \.self) { index in
-                        Rectangle()
-                            .fill(viewModel.clearedCells.contains(index) ? .green : .blue)
-                            .frame(width: cellSize, height: cellSize)
-                            .cornerRadius(4)
-                            .gesture(
-                                DragGesture(minimumDistance: 0)
-                                    .onChanged { _ in viewModel.clearCell(index) }
-                            )
+        ZStack {
+            Color.black.ignoresSafeArea() // Background base
+
+            // Grid overlay
+            LazyVGrid(columns: columns, spacing: cellSpacing) {
+                ForEach(0..<totalCells, id: \.self) { index in
+                    Rectangle()
+                        .fill(viewModel.clearedCells.contains(index) ? .green : .blue)
+                        .frame(width: cellSize, height: cellSize)
+//                        .cornerRadius(4)
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged { _ in viewModel.clearCell(index) }
+                        )
+                }
+            }
+            .frame(width: screenSize.width, height: screenSize.height)
+            .ignoresSafeArea()
+
+            //  Test Result Overlay
+            if viewModel.showResultOverlay {
+                TestResultOverlay(
+                    passed: viewModel.testPassed,
+                    title: viewModel.testPassed ? DiagnosticStrings.testPassed : DiagnosticStrings.testFailed,
+                    onRestart: {
+                        viewModel.startTest()
+                    },
+                    onDone: {
+                        dismiss()
                     }
-                }
-                
-                .padding(cellSpacing)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .ignoresSafeArea()
-                // Test result overlay
-                if viewModel.showResultOverlay {
-                    TestResultOverlay(
-                        passed: viewModel.testPassed,
-                        title: viewModel.testPassed ? DiagnosticStrings.testPassed : DiagnosticStrings.testFailed,
-                        onRestart: {
-                            viewModel.startTest()
-                        },
-                        onDone: {
-                            dismiss()
-                        }
-                    )
-                }
+                )
             }
-            .onAppear {
-                viewModel.gridSize = totalCells
-                viewModel.startTest()
+        }
+        .statusBar(hidden: true) //  Hide system UI
+        .onAppear {
+            viewModel.gridSize = totalCells
+            viewModel.startTest()
+        }
+        .alert(DiagnosticStrings.testCompletionPromptTitle, isPresented: $viewModel.showCompletionPrompt) {
+            Button(DiagnosticStrings.testCompletionPromptConfirm) {
+                viewModel.finishTest(manualChoice: nil)
             }
-            // "Are you done?" alert after 20 seconds
-            .alert(DiagnosticStrings.testCompletionPromptTitle, isPresented: $viewModel.showCompletionPrompt) {
-                Button(DiagnosticStrings.testCompletionPromptConfirm) {
-                    viewModel.finishTest(manualChoice: nil)
-                }
-                Button(DiagnosticStrings.testCompletionPromptCancel, role: .cancel) {
-                    viewModel.showCompletionPrompt = false
-                    viewModel.scheduleCompletionPrompt()
-                }
+            Button(DiagnosticStrings.testCompletionPromptCancel, role: .cancel) {
+                viewModel.showCompletionPrompt = false
+                viewModel.scheduleCompletionPrompt()
             }
         }
     }

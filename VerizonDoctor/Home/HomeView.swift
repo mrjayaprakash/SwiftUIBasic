@@ -85,7 +85,6 @@ struct HomeView: View {
         case .badPixel:
             return AnyView(BadPixelTestView(testcase: testCase))
         case .multiTouch:
-            return AnyView(MultiTouchScreenView(testcase: testCase))
+            return AnyView(MultiTouchView(testCase: testCase))
         }
     }
-

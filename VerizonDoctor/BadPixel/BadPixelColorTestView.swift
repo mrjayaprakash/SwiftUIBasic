@@ -36,7 +36,7 @@ struct BadPixelColorTestView: View {
             Task {
                 for i in 0..<colors.count {
                     currentIndex = i
-                    try? await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+                    try? await Task.sleep(nanoseconds: 3_000_000_000) // 3 second
                 }
                 testCompleted = true
             }
