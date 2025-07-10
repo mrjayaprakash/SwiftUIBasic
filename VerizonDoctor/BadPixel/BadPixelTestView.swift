@@ -22,7 +22,16 @@ struct BadPixelTestView: View {
         VStack {
             Text(testCase.name)
                 .font(.title2)
-            
+            TestInstructionView(
+                title: "Bad Pixel Test Instructions",
+                steps: [
+                    "The screen will cycle through solid red, green, blue, black, and white backgrounds.",
+                    "Each color will be displayed for 3 seconds.",
+                    "Carefully observe the screen for any dead, stuck, or discolored pixels.",
+                    "If the screen appears uniform without defects, mark the test as passed."
+                ]
+            )
+
             if let result = viewModel.testResult {
                 TestResultView(result: result)
             }
@@ -34,6 +43,8 @@ struct BadPixelTestView: View {
             }
             .buttonStyle(.borderedProminent)
         }
+        .navigationTitle(viewModel.testCase.name)
+        .navigationBarTitleDisplayMode(.inline)
         .padding()
         .fullScreenCover(isPresented: $isPresentingColorTest) {
             BadPixelColorTestView(colors: viewModel.colors) { passed in

@@ -39,3 +39,29 @@ struct SingleTouchView: UIViewRepresentable {
         override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {}
     }
 }
+struct TouchCaptureView: UIViewRepresentable {
+    let onTouch: (CGPoint) -> Void
+
+    func makeUIView(context: Context) -> UIView {
+        let view = TouchTrackingUIView()
+        view.onTouch = onTouch
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {}
+
+    class TouchTrackingUIView: UIView {
+        var onTouch: ((CGPoint) -> Void)?
+
+        override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+            for touch in touches {
+                let location = touch.location(in: self)
+                onTouch?(location)
+            }
+        }
+
+        override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+            touchesMoved(touches, with: event)
+        }
+    }
+}

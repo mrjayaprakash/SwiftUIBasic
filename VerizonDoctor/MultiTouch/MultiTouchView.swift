@@ -46,6 +46,8 @@ struct MultiTouchView: View {
             }
             .buttonStyle(.borderedProminent)
         }
+        .navigationTitle(viewModel.testCase.name)
+        .navigationBarTitleDisplayMode(.inline)
         .padding()
         .fullScreenCover(isPresented: $isPresentingTest) {
             MultiTouchSyncView(

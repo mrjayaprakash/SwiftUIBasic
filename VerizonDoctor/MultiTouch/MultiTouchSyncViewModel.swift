@@ -18,7 +18,7 @@ class MultiTouchSyncViewModel: ObservableObject {
     private let requiredRounds = 2
     private var currentRound = 0
     private var timer: Timer?
-    private let testCase: TestCase
+    let testCase: TestCase
     private var startTime: Date?
     init(testCase: TestCase) {
         self.testCase = testCase

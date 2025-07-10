@@ -20,36 +20,45 @@ struct HomeGridView: View {
                 ForEach(testCases) { testcase in
                     NavigationLink(destination: getTestCaseView(testcase)) {
                         let isSelected = selectedIDs.contains(testcase.id)
-                    VStack(alignment: .leading, spacing: 8) {
-                        Image(testcase.icon)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 40, height: 40)
 
-//                        VStack(alignment: .leading, spacing: 4) {
-                            Text(testcase.name)
-                                .font(.system(size: 12))
-                                .foregroundColor(.black)
-                                .lineLimit(nil) // allows unlimited lines
-                                .fixedSize(horizontal: false, vertical: true)
-                        
-                    }
-//                    .onTapGesture {
-//                        toggleSelection(testcase)
-//                    }
-                        .padding()
-                        .frame(width: 112, height: 95)
-                        .background(
+                        ZStack {
                             RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray, lineWidth: 2)
-//                                            .stroke(isSelected ? Color.blue : Color.gray, lineWidth: 2)
-                        )
+//                                .stroke(Color.black, lineWidth: 1)
+                                .stroke(isSelected ? Color.blue : Color.gray, lineWidth: 1)
+
+                            VStack(alignment: .leading, spacing: 8) {
+                                HStack {
+                                    Image(testcase.icon)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .padding(.leading, 1)
+                                    Spacer()
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+//                                .background(Color.green)
+
+                                Text(testcase.name)
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.black)
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .padding(.bottom, 12)
+                            }
+//                            .onTapGesture {
+//                                toggleSelection(testcase)
+//                            }
+
+                            .padding(.top, 8) // Top padding applied to the entire VStack
+                            .padding(.horizontal, 8)
+                        }
+                        .frame(width: 104, height: 88)
                     }
                 }
             }
-            .padding(.top, 8)
+            .padding(.top, 24)
             .padding(.bottom, 8)
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 16)
         }
     }
 }

@@ -126,6 +126,14 @@ enum DiagnosticStrings {
 
     static let multiTouchFailureDetails = "User did not complete the simultaneous tap gesture within the time limit, indicating potential multi-touch recognition issues."
 
+    // MARK: - Camera
+    
+    static let cameraPassSummary = "Camera is functioning properly."
+    static let cameraFailSummary = "Camera test failed."
+
+    static let cameraSuccessDetails = "Image capture successful via AVCaptureSession."
+    static let cameraFailureDetails = "Camera access failed or no image captured."
+
     
     // MARK: - Metadata Keys
 

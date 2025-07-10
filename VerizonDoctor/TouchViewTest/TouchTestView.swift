@@ -40,6 +40,11 @@ struct TouchTestView: View {
             }
             .frame(width: screenSize.width, height: screenSize.height)
             .ignoresSafeArea()
+            TouchCaptureView { point in
+                if let index = viewModel.indexForTouch(location: point, in: screenSize.size, cellSize: cellSize, spacing: cellSpacing) {
+                    viewModel.clearCell(index)
+                }
+            }
 
             //  Test Result Overlay
             if viewModel.showResultOverlay {

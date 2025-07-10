@@ -15,17 +15,32 @@ struct TouchScreenView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text(viewModel.testCase.name)
                 .font(.title2)
+            
+            TestInstructionView(
+                title: "Touch Test Instructions",
+                steps: [
+                    "Tap each blue square on the screen to complete the test.",
+                    "Squares will turn green when touched successfully.",
+                    "You must cover the entire screen area by tapping every cell.",
+                    "Once all squares are cleared, the test will automatically pass."
+                ]
+            )
             
             if let testResult = viewModel.testResult {
                 TestResultView(result: testResult)
             }
             Spacer()
             
-            Button(DiagnosticStrings.runTest) {
-                isPresentingTouchTest = true
+            HStack {
+                Button(DiagnosticStrings.runTest) {
+                    isPresentingTouchTest = true
+                }
+                .buttonStyle(RunButtonStyle())
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 16)
             }
             .buttonStyle(.borderedProminent)
         }

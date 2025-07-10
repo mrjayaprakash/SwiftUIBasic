@@ -31,9 +31,17 @@ class TouchSurfaceView: UIView {
         report()
     }
 
+//    private func report() {
+//        DispatchQueue.main.async {
+//            self.onTouchesChanged(Array(self.active.values))
+//        }
+//    }
     private func report() {
         DispatchQueue.main.async {
-            self.onTouchesChanged(Array(self.active.values))
+            let convertedPoints = self.active.values.map { touchPoint in
+                self.convert(touchPoint, to: nil) // Convert to screen coordinates
+            }
+            self.onTouchesChanged(convertedPoints)
         }
     }
 }

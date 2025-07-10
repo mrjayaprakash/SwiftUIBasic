@@ -57,9 +57,18 @@ class TouchTestViewModel: ObservableObject {
             testCase: testCase,
             summary: testPassed ? DiagnosticStrings.touchPassSummary : DiagnosticStrings.touchFailSummary,
             details: testPassed ? DiagnosticStrings.touchSuccessDetails : DiagnosticStrings.touchFailureDetails,
+            output: [
+                "clearedCells": "\(clearedCells.count)",
+                "totalCells": "\(gridSize)"
+            ],
             timestamp: Date(),
-            duration: startTime.map { Date().timeIntervalSince($0) }
+            duration: startTime.map { Date().timeIntervalSince($0) },
+            metadata: [
+                "touchCoverageRatio": String(format: "%.2f", Double(clearedCells.count) / Double(gridSize)),
+                "testPassed": testPassed
+            ]
         )
+
     }
     func scheduleCompletionPrompt() {
         promptTimer?.invalidate()
