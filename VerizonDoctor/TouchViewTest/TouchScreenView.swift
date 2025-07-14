@@ -15,7 +15,7 @@ struct TouchScreenView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(spacing: 16) {
             Text(viewModel.testCase.name)
                 .font(.title2)
             

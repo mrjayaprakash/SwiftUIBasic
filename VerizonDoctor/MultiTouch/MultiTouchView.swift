@@ -31,7 +31,7 @@ struct MultiTouchView: View {
                     "Use two fingers to tap both red circles simultaneously.",
                     "You must complete each round within 10 seconds.",
                     "After the first success, the circles will move — repeat once more.",
-                    "If you fail to tap in time, the test fails."
+                    "If either round fails or times out, the test will be marked as failed."
                 ]
             )
 
