@@ -74,7 +74,7 @@ struct HomeView: View {
             return AnyView(AccelerometerView(testcase: testCase))
         case .magnetoMeter:
             return AnyView(MagnetometerView(testcase: testCase))
-        case .speaker, .camera:
+        case .speaker:
             return AnyView(GyrocopeView(testcase: testCase)) // Consider creating dedicated views if needed
         case .flashlight:
             return AnyView(FlashlightView(testcase: testCase))
@@ -86,5 +86,7 @@ struct HomeView: View {
             return AnyView(BadPixelTestView(testcase: testCase))
         case .multiTouch:
             return AnyView(MultiTouchView(testCase: testCase))
+        case .camera:
+            return AnyView(CameraTestView(testcase: testCase))
         }
     }
